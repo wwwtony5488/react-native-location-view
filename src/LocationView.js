@@ -6,6 +6,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import axios from 'axios';
 import Events from 'react-native-simple-events';
 import MapView from 'react-native-maps';
+import Geolocation from '@react-native-community/geolocation';
 
 import AutoCompleteInput from './AutoCompleteInput';
 
@@ -106,7 +107,7 @@ export default class LocationView extends React.Component {
   };
 
   _getCurrentLocation = () => {
-    navigator.geolocation.getCurrentPosition(position => {
+    Geolocation.getCurrentPosition(position => {
       let location = (({ latitude, longitude }) => ({ latitude, longitude }))(position.coords);
       this._setRegion(location);
     });

@@ -19,7 +19,7 @@ export default class AutoCompleteInput extends React.Component {
   };
 
   static defaultProps = {
-    language: 'en',
+    language: 'zh-TW',
     components: [],
   };
 
@@ -63,12 +63,11 @@ export default class AutoCompleteInput extends React.Component {
   };
 
   _request = text => {
-    this._abortRequest();
-    if (text.length >= 3) {
+    if (text.length >= 2) {
       this.source = CancelToken.source();
+      console.log(AUTOCOMPLETE_URL);
       axios
         .get(AUTOCOMPLETE_URL, {
-          cancelToken: this.source.token,
           params: {
             input: text,
             key: this.props.apiKey,
@@ -77,8 +76,11 @@ export default class AutoCompleteInput extends React.Component {
           },
         })
         .then(({ data }) => {
-          let { predictions } = data;
+          const { predictions } = data;
           this.setState({ predictions });
+        })
+        .catch(error => {
+          console.log(apiKey, error);
         });
     } else {
       this.setState({ predictions: [] });
@@ -124,10 +126,10 @@ export default class AutoCompleteInput extends React.Component {
         <View style={styles.textInputContainer} elevation={5}>
           <TextInput
             ref={input => (this._input = input)}
-            value={this.state.loading ? 'Loading...' : this.state.text}
+            value={this.state.loading ? '載入中' : this.state.text}
             style={styles.textInput}
             underlineColorAndroid={'transparent'}
-            placeholder={'Search'}
+            placeholder={'輸入地點或街道'}
             onFocus={this._onFocus}
             onBlur={this._onBlur}
             onChangeText={this._onChangeText}
